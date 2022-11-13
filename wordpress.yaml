@@ -7,10 +7,10 @@ services:
       - wordpressNFS-mysql:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
 
   phpmyadmin:
     depends_on:
@@ -18,10 +18,10 @@ services:
     image: phpmyadmin/phpmyadmin
     restart: always
     ports:
-      - ${myPHPport}:80
+      - $MYPHP_PORT:80
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
 
   wordpress:
     depends_on: 
@@ -30,12 +30,12 @@ services:
     volumes:
       - wordpressNFS-wordpress:/var/www/html
     ports:
-      - ${wpPort}:80
+      - $WP_PORT:80
     restart: always
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_USER: $MYSQL_USER
+      WORDPRESS_DB_PASSWORD: $MYSQL_PASSWORD
       HTTP_X_FORWARDED_PROTO: true
        
 volumes:
@@ -43,12 +43,12 @@ volumes:
       driver: local
       driver_opts:
         type: nfs
-        o: "addr=x.x.x.x,nolock,soft,rw"
-        device: ":/volume5/docker/wordpress-containers/mysql/wp-1"
+        o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
+        device: :/volume5/docker/wordpress-containers/$NFS_FOLDER/mysql
 
     wordpressNFS-wordpress:
       driver: local
       driver_opts:
         type: nfs
-        o: "addr=x.x.x.x,nolock,soft,rw"
-        device: ":/volume5/docker/wordpress-containers/wordpress/wp-1"
+        o: addr=NFS_IP,nolock,soft,rw,nfsvers=4
+        device: :/volume5/docker/wordpress-containers/$NFS_FOLDER/wordpress
