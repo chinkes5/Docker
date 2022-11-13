@@ -21,7 +21,7 @@ services:
       - ${myPHPport}:80
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: Pa$$w0rd 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
 
   wordpress:
     depends_on: 
@@ -43,12 +43,12 @@ volumes:
       driver: local
       driver_opts:
         type: nfs
-        o: o: "addr=x.x.x.x,nolock,soft,rw"
+        o: "addr=x.x.x.x,nolock,soft,rw"
         device: ":/volume5/docker/wordpress-containers/mysql/wp-1"
 
     wordpressNFS-wordpress:
       driver: local
       driver_opts:
         type: nfs
-        o: o: "addr=x.x.x.x,nolock,soft,rw"
+        o: "addr=x.x.x.x,nolock,soft,rw"
         device: ":/volume5/docker/wordpress-containers/wordpress/wp-1"
