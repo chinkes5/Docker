@@ -35,3 +35,5 @@ volumes:
       type: nfs
       o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
       device: :/volume5/docker/wordpress-containers/pihole
+
+# add lists to gravity from https://firebog.net/
