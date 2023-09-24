@@ -7,13 +7,13 @@ services:
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
+      - "8053:53/tcp"
+      - "8053:53/udp"
       #- "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "80:8081/tcp"
+      - "8081:80/tcp"
     environment:
       TZ: 'America/Denver'
-      # WEBPASSWORD: 'set a secure password here or it will be random'
+      WEBPASSWORD: $PIPWD #'set a secure password here or it will be random'
       VIRTUAL_HOST: pi.chinkes.huis
       DNSMASQ_LISTENING: all
     # Volumes store your data between container upgrades
