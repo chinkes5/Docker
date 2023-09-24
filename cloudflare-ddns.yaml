@@ -4,7 +4,7 @@ services:
     image: oznu/cloudflare-ddns:latest
     restart: always
     environment:
-      - API_KEY=xxxxxxx
+      - API_KEY=$API-KEY
       - ZONE=chinkes.com
       - SUBDOMAIN=home
       - PROXIED=false
