@@ -19,6 +19,7 @@ services:
       DNSMASQ_LISTENING: all
       IPv6: 'false'
       DHCP_IPv6: 'false'
+      DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
     volumes:
       - 'piholeNFS:/etc/pihole'
       - 'piholeNFS:/etc/dnsmasq.d'
