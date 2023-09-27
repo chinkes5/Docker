@@ -21,8 +21,8 @@ services:
       - 'piholeNFS:/etc/pihole'
       - 'piholeNFS:/etc/dnsmasq.d'
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    #cap_add:
-      # NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    cap_add:
+      NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
     labels:
       # This label will prevent Watchtower from updating pihole
