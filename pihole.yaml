@@ -7,10 +7,10 @@ services:
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
-      - "8053:53/tcp"
-      - "8053:53/udp"
+      - "53:53/tcp"
+      - "53:53/udp"
       #- "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "8081:80/tcp"
+      - "80:80/tcp"
     environment:
       TZ: 'America/Denver'
       WEBPASSWORD: $PIPWD #'set a secure password here or it will be random'
