@@ -33,9 +33,9 @@ services:
       # https://github.com/pi-hole/docker-pi-hole#note-on-watchtower
       - "com.centurylinklabs.watchtower.enable=false"
     networks:
-      - macvlan_network:
-          ipv4_address: 192.168.60.249
-      - bridge_network
+      macvlan_network:
+        ipv4_address: 192.168.60.249
+      bridge_network: 
 
 volumes:
   NFS-pihole:
