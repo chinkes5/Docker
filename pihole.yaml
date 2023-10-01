@@ -32,9 +32,9 @@ services:
       # This label will prevent Watchtower from updating pihole
       # https://github.com/pi-hole/docker-pi-hole#note-on-watchtower
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      macvlan_network:
-        ipv4_address: 192.168.60.249
+    # networks:
+    #   macvlan_network:
+    #     ipv4_address: 192.168.60.249
       # bridge_network: 
 
 volumes:
@@ -53,16 +53,16 @@ volumes:
 
 # add lists to gravity from https://firebog.net/
 
-networks:
-  macvlan_network:
-    driver: macvlan
-    driver_opts:
-      parent: ens160 # This is dependent on your host setup
-    ipam:
-      driver: default
-      config:
-       - subnet: 192.168.60.0/24
-         ip_range: 192.168.60.248/29
-         gateway: 192.168.60.1
+# networks:
+#   macvlan_network:
+#     driver: macvlan
+#     driver_opts:
+#       parent: ens160 # This is dependent on your host setup
+#     ipam:
+#       driver: default
+#       config:
+#        - subnet: 192.168.60.0/24
+#          ip_range: 192.168.60.248/29
+#          gateway: 192.168.60.1
   # bridge_network:
   #   driver: bridge
