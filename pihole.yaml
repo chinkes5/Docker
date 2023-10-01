@@ -19,7 +19,8 @@ services:
       DNSMASQ_LISTENING: all
       IPv6: 'false'
       DHCP_IPv6: 'false'
-      DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
+      # DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
+      FTLCONF_LOCAL_IPV4: 192.168.60.249
     volumes:
       - 'NFS-pihole:/etc/pihole'
       - 'NFS-dnsmasq:/etc/dnsmasq.d'
@@ -32,8 +33,9 @@ services:
       # https://github.com/pi-hole/docker-pi-hole#note-on-watchtower
       - "com.centurylinklabs.watchtower.enable=false"
     networks:
-      macvlan_network:
-        ipv4_address: 192.168.60.249
+      - macvlan_network:
+          ipv4_address: 192.168.60.249
+      - bridge_network
 
 volumes:
   NFS-pihole:
@@ -62,3 +64,5 @@ networks:
        - subnet: 192.168.60.0/24
          ip_range: 192.168.60.248/29
          gateway: 192.168.60.1
+  bridge_network:
+    driver: bridge
