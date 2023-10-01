@@ -7,13 +7,13 @@ services:
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
-      - "8053:53/tcp"
-      - "8053:53/udp"
-      - "8180:80/tcp"
-      # - "53:53/tcp"
-      # - "53:53/udp"
+      # - "8053:53/tcp"
+      # - "8053:53/udp"
+      # - "8180:80/tcp"
+      - "53:53/tcp"
+      - "53:53/udp"
       # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      # - "80:80/tcp"
+      - "80:80/tcp"
     environment:
       TZ: 'America/Denver'
       WEBPASSWORD: $PIPWD #'set a secure password here or it will be random'
@@ -23,22 +23,23 @@ services:
       IPv6: 'false'
       DHCP_IPv6: 'false'
       # DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
-      # FTLCONF_LOCAL_IPV4: 192.168.60.249
+      FTLCONF_LOCAL_IPV4: 192.168.60.249
     volumes:
       - 'NFS-pihole:/etc/pihole'
       - 'NFS-dnsmasq:/etc/dnsmasq.d'
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    cap_add:
-      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    # cap_add:
+    #   - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
     labels:
       # This label will prevent Watchtower from updating pihole
       # https://github.com/pi-hole/docker-pi-hole#note-on-watchtower
       - "com.centurylinklabs.watchtower.enable=false"
-    # networks:
+    networks:
     #   macvlan_network:
     #     ipv4_address: 192.168.60.249
-      # bridge_network: 
+      bridge_network: 
+        ipv4_address: 192.168.60.249
 
 volumes:
   NFS-pihole:
@@ -56,7 +57,7 @@ volumes:
 
 # add lists to gravity from https://firebog.net/
 
-# networks:
+networks:
 #   macvlan_network:
 #     driver: macvlan
 #     driver_opts:
@@ -67,5 +68,11 @@ volumes:
 #        - subnet: 192.168.60.0/24
 #          ip_range: 192.168.60.248/29
 #          gateway: 192.168.60.1
-  # bridge_network:
-  #   driver: bridge
+  bridge_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+       - subnet: 192.168.60.0/24
+         ip_range: 192.168.60.248/29
+         gateway: 192.168.60.1
