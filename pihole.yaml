@@ -9,8 +9,11 @@ services:
     ports:
       - "8053:53/tcp"
       - "8053:53/udp"
-      # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
       - "8180:80/tcp"
+      # - "53:53/tcp"
+      # - "53:53/udp"
+      # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      # - "80:80/tcp"
     environment:
       TZ: 'America/Denver'
       WEBPASSWORD: $PIPWD #'set a secure password here or it will be random'
