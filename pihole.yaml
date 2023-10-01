@@ -42,7 +42,7 @@ volumes:
       type: nfs
       o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
       device: :/volume5/docker/pihole/pihole
-  NFS-dnsmasq.d:
+  NFS-dnsmasq:
     driver: local
     driver_opts:
       type: nfs
