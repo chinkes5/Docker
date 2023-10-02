@@ -36,10 +36,10 @@ services:
       # https://github.com/pi-hole/docker-pi-hole#note-on-watchtower
       - "com.centurylinklabs.watchtower.enable=false"
     networks:
-    #   macvlan_network:
-    #     ipv4_address: 192.168.60.249
-      bridge_network: 
+      macvlan_network:
         ipv4_address: 192.168.60.249
+      bridge_network: 
+        ipv4_address: 192.168.209.5
 
 volumes:
   NFS-pihole:
@@ -55,24 +55,22 @@ volumes:
       o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
       device: :/volume5/docker/pihole/dnsmasq.d
 
-# add lists to gravity from https://firebog.net/
-
 networks:
-#   macvlan_network:
-#     driver: macvlan
-#     driver_opts:
-#       parent: ens160 # This is dependent on your host setup
-#     ipam:
-#       driver: default
-#       config:
-#        - subnet: 192.168.60.0/24
-#          ip_range: 192.168.60.248/29
-#          gateway: 192.168.60.1
-  bridge_network:
-    driver: bridge
+  macvlan_network:
+    driver: macvlan
+    driver_opts:
+      parent: ens160 # This is dependent on your host setup
     ipam:
       driver: default
       config:
        - subnet: 192.168.60.0/24
          ip_range: 192.168.60.248/29
          gateway: 192.168.60.1
+  bridge_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+       - subnet: 192.168.209.0/24
+         ip_range: 192.168.209.248/29
+         gateway: 192.168.209.1
