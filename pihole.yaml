@@ -7,11 +7,11 @@ services:
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
-      - "8053:53/tcp"
-      - "8053:53/udp"
+      # - "8053:53/tcp"
+      # - "8053:53/udp"
       # - "8180:80/tcp"
-      # - "53:53/tcp"
-      # - "53:53/udp"
+      - "192.168.60.249:53:53/tcp"
+      - "192.168.60.249:53:53/udp"
       # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
       - "80:80/tcp"
     environment:
@@ -19,10 +19,10 @@ services:
       WEBPASSWORD: $PIPWD #'set a secure password here or it will be random'
       VIRTUAL_HOST: pi.chinkes.huis
       PIHOLE_DNS_: 1.1.1.1;208.67.222.222
-      DNSMASQ_LISTENING: all
+      DNSMASQ_LISTENING: local
       IPv6: 'false'
       DHCP_IPv6: 'false'
-      # DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
+      DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
       FTLCONF_LOCAL_IPV4: 192.168.60.249
     volumes:
       - 'NFS-pihole:/etc/pihole'
