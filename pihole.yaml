@@ -19,7 +19,7 @@ services:
       WEBPASSWORD: $PIPWD #'set a secure password here or it will be random'
       VIRTUAL_HOST: pi.chinkes.huis
       PIHOLE_DNS_: 1.1.1.1;208.67.222.222
-      DNSMASQ_LISTENING: local
+      DNSMASQ_LISTENING: all
       IPv6: 'false'
       DHCP_IPv6: 'false'
       DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
