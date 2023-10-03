@@ -10,8 +10,8 @@ services:
       # - "8053:53/tcp"
       # - "8053:53/udp"
       # - "8180:80/tcp"
-      - "192.168.60.249:53:53/tcp"
-      - "192.168.60.249:53:53/udp"
+      - "53:53/tcp"
+      - "53:53/udp"
       # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
       - "80:80/tcp"
     environment:
@@ -23,7 +23,7 @@ services:
       IPv6: 'false'
       DHCP_IPv6: 'false'
       DNSMASQ_USER: root # https://discourse.pi-hole.net/t/pihole-ftl-operation-not-permitted/54642/4
-      FTLCONF_LOCAL_IPV4: 192.168.60.249
+      FTLCONF_LOCAL_IPV4: 192.168.1.2
     volumes:
       - 'NFS-pihole:/etc/pihole'
       - 'NFS-dnsmasq:/etc/dnsmasq.d'
@@ -37,7 +37,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
     networks:
       macvlan_network:
-        ipv4_address: 192.168.60.249
+        ipv4_address: 192.168.1.2
       bridge_network: 
         ipv4_address: 172.20.0.20
 
@@ -63,9 +63,9 @@ networks:
     ipam:
       driver: default
       config:
-       - subnet: 192.168.60.0/24
-         ip_range: 192.168.60.248/29
-         gateway: 192.168.60.1
+       - subnet: 192.168.1.0/28
+         ip_range: 192.168.1.2/32
+         gateway: 192.168.1.1
   bridge_network:
     driver: bridge
     ipam:
