@@ -19,3 +19,6 @@ Add lists to Gravity from https://firebog.net/. There are whitelists at https://
 
 ### MACVLAN
 The additional bit is adding a network to my Unifi Controller for the network defined in the compose file. In the end, I made a subnet that fit in at the beginning of my network IP ranges. I think the network can't be that far off what the NIC is already using, noted here as Parent.
+
+## Unifi Controller
+This is the image from [jacobalberty/unifi](https://github.com/jacobalberty/unifi-docker). It's using several folders on the NAS, so need to provide NFS_IP environment variable. It will also spin up a Mongo DB and logging container too. If your files are not on the paths, you can upload a backup config on first start. The [bottom part](https://pimylifeup.com/synology-nas-unifi-network-controller/) of this tutorial talks about what to do once you have the controller running on Synology, specifically some network settings!
