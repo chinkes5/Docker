@@ -1,39 +1,19 @@
+version: "3.7"
 services:
-  mongo:
-    image: mongo:3.6
-    container_name: ${COMPOSE_PROJECT_NAME}_mongo
-    networks:
-      - unifi
-    restart: always
-    volumes:
-      - db:/data/db
-      - dbcfg:/data/configdb
   controller:
     image: "jacobalberty/unifi:${TAG:-latest}"
-    container_name: ${COMPOSE_PROJECT_NAME}_controller
-    depends_on:
-      - mongo
+    container_name: "${COMPOSE_PROJECT_NAME:-unifi}_controller"
     init: true
-    networks:
-      - unifi
     restart: always
     volumes:
-      - dir:/unifi
-      - data:/unifi/data
-      - log:/unifi/log
-      - cert:/unifi/cert
-      - init:/unifi/init.d
-      - run:/var/run/unifi
-      # Mount local folder for backups and autobackups
-      - backup:/unifi/data/backup
+      - unifi-data:/unifi
     labels:
       # This label will prevent Watchtower from updating the controller automatically
       - "com.centurylinklabs.watchtower.enable=false"
-    user: unifi
     environment:
-      DB_URI: mongodb://mongo/unifi
-      STATDB_URI: mongodb://mongo/unifi_stat
-      DB_NAME: unifi
+      - "TZ=America/Denver" # Set your timezone
+      - "PUID=$PUID"
+      - "PGID=$PGID"
     ports:
       - "3478:3478/udp" # STUN
       - "6789:6789/tcp" # Speed test
@@ -42,56 +22,17 @@ services:
       - "8880:8880/tcp" # HTTP portal redirection
       - "8843:8843/tcp" # HTTPS portal redirection
       - "10001:10001/udp" # AP discovery
-  logs:
-    image: bash
-    container_name: ${COMPOSE_PROJECT_NAME}_logs
-    depends_on:
-      - controller
-    command: bash -c 'tail -F /unifi/log/*.log'
-    restart: always
-    volumes:
-      - log:/unifi/log
+      - "5514:5514/udp" # Remote syslog capture
+    networks:
+      - unifi
 
 volumes:
-  db: # mongo data
+  unifi-data:
     driver: local
     driver_opts:
       type: nfs
       o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
-      device: :/volume5/docker/unifi/db
-  dbcfg: # mongo config
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
-      device: :/volume5/docker/unifi/dbcfg
-  data: # unifi data
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
-      device: :/volume5/docker/unifi/data
-  log: # unifi logs
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
-      device: :/volume5/docker/unifi/log
-  cert: # unifi certs
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
-      device: :/volume5/docker/unifi/cert
-  backup: # unifi backups
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
-      device: :/volume5/docker/unifi/backup
-  init: # unifi init.d
-  dir: # unifi root dir
-  run: # unifi run
+      device: :/volume5/docker/unifi # Point to the parent directory for UniFi data
 
 networks:
   unifi:
