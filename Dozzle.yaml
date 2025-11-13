@@ -1,0 +1,38 @@
+version: "3"
+services:
+  dozzle:
+    image: "dozzle/dozzle:latest"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data
+    environment:
+      - DOZER_DB_HOST=postgres
+      - DOZER_DB_USER=postgres
+      - DOZER_DB_PASSWORD=postgres
+      - DOZER_DB_NAME=postgres
+      - DOZER_DB_PORT=5432
+    depends_on:
+      - postgres
+    restart_policy:
+      condition: on-failure
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart_policy:
+      condition: on-failure
+
+volumes:
+  data:
+  pgdata:
+
+networks:
+  default:
+    external: true

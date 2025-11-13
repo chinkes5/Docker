@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  uptime-kuma:
+    image: louislabs/uptime-kuma:latest
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+    depends_on:
+      - postgres
+    restart_policy:
+      condition: on-failure
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart_policy:
+      condition: on-failure
+
+volumes:
+  data:
+  pgdata:
+
+networks:
+  default:
+    external: true

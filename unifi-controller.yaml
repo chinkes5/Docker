@@ -12,8 +12,10 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
     environment:
       - "TZ=America/Denver" # Set your timezone
-      - "PUID=$PUID"
-      - "PGID=$PGID"
+      - "PUID=$PUID" # Optional: Set to your user ID
+      - "PGID=$PGID" # Optional: Set to your group ID
+      - "UNIFI_DB_HOST=127.0.0.1" # Force use of internal database
+      - "SYSTEM_IP=$SYSTEM_IP" # Optional: Set to the IP of your host machine to help with discovery
     ports:
       - "3478:3478/udp" # STUN
       - "6789:6789/tcp" # Speed test

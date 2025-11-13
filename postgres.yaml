@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_main
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: supersecret
+      POSTGRES_DB: defaultdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - monitor_net
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+
+networks:
+  monitor_net:
+    driver: bridge
