@@ -1,38 +1,22 @@
-version: "3"
+version: "3.9"
 services:
   beszel:
     image: ghcr.io/beszel/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    env_file:
+      - monitoring.env
     ports:
-      - "8080:8080"
-    volumes:
-      - ./data:/data
+      - "8082:8080" # Changed to 8082 to avoid conflict with UniFi and WordPress
     environment:
-      - BESZEL_DB_HOST=postgres
-      - BESZEL_DB_USER=postgres
-      - BESZEL_DB_PASSWORD=postgres
-      - BESZEL_DB_NAME=postgres
+      - BESZEL_DB_HOST=postgres_main
+      - BESZEL_DB_USER=${BESZEL_DB_USER}
+      - BESZEL_DB_PASSWORD=${BESZEL_DB_PASSWORD}
+      - BESZEL_DB_NAME=beszel
       - BESZEL_DB_PORT=5432
-    depends_on:
-      - postgres
-    restart_policy:
-      condition: on-failure
-  postgres:
-    image: postgres
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart_policy:
-      condition: on-failure
-
-volumes:
-  data:
-  pgdata:
+    networks:
+      - monitor_net
 
 networks:
-  default:
-    external: true
+  monitor_net:
+    external: true # Connects to the network created by the main stack

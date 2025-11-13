@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_main
+    restart: unless-stopped
+    environment:
+      # POSTGRES_USER and POSTGRES_PASSWORD are in the env_file
+      POSTGRES_DB: postgres # Default admin database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - /opt/docker/stacks/monitoring/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh # Use absolute path on Docker host
+    ports:
+      - "5432:5432"
+    networks:
+      - monitor_net
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime_kuma
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://${UPTIME_KUMA_DB_USER}:${UPTIME_KUMA_DB_PASSWORD}@postgres:5432/uptime_kuma
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime_kuma_data:/app/data
+    depends_on:
+      - postgres
+    networks:
+      - monitor_net
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
+      device: :/volume5/docker/monitoring/postgres
+  uptime_kuma_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
+      device: :/volume5/docker/monitoring/uptime_kuma
+
+networks:
+  monitor_net:
+    name: monitor_net
+    driver: bridge
