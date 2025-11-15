@@ -1,0 +1,5 @@
+# Ignore environment files that contain secrets
+*.env
+
+# Ignore local Docker override files
+docker-compose.override.yml

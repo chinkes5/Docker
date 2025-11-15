@@ -1,6 +1,15 @@
 # Docker
 A place for all my Docker Compose files.
 
+## Secrets Management
+This repository uses `.env.example` files as templates for configuration. To run these services, you must:
+1.  Create a copy of the relevant `.env.example` file and rename it to `.env` (e.g., `cp unifi-controller.env.example unifi-controller.env`).
+2.  Fill in the required values (passwords, IP addresses, API keys) in the new `.env` file.
+
+The actual `.env` files are listed in `.gitignore` and will not be committed to the repository. It is strongly recommended to store your secret values in a secure password manager.
+
+---
+
 ## Wordpress
 This is three containers- wordpress, mysql, and myphpadmin. The last one is to edit the database in case I mess up royally...
 There is an environment file that you would put in the specific values to run in the compose YAML. In Portainer, this file gets a default name, stack.env. I'm using an NFS share to persist storage for the containers, which is hosted on my Synology, and the primary IP is used to connect. The wordpress db user/pwd just needs a reference to the hard coded db user/pwd above.
@@ -40,6 +49,6 @@ This uses the image from [jacobalberty/unifi](https://github.com/jacobalberty/un
 
 It persists all its data to a single parent directory on an NFS share. To handle permissions correctly between the container and the Synology NAS, the `PUID` and `PGID` environment variables should be set to match the owner of the data directory on the NAS.
 
-If migrating from an older setup, you may need to manually remove database connection strings from the `system.properties` file to force the controller to use its internal database.
+If migrating from an older setup, you may need to manually remove database connection strings from the `system.properties` file to force the controller to use its internal database. See [here](https://github.com/jacobalberty/unifi-docker/blob/main/Side-Projects.md) for more details.
 
 The [bottom part](https://pimylifeup.com/synology-nas-unifi-network-controller/) of this tutorial talks about what to do once you have the controller running on Synology, specifically some network settings!
