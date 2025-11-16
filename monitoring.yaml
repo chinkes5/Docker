@@ -10,9 +10,9 @@ services:
       POSTGRES_DB: postgres # Default admin database
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - /opt/docker/stacks/monitoring/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh # Use absolute path on Docker host
+      - /volume5/docker/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh # Use absolute path on Docker host
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - monitor_net
 

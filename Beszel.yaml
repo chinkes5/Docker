@@ -10,8 +10,8 @@ services:
       - "8082:8080" # Changed to 8082 to avoid conflict with UniFi and WordPress
     environment:
       - BESZEL_DB_HOST=postgres_main
-      - BESZEL_DB_USER=${BESZEL_DB_USER}
-      - BESZEL_DB_PASSWORD=${BESZEL_DB_PASSWORD}
+      - BESZEL_DB_USER=$BESZEL_DB_USER
+      - BESZEL_DB_PASSWORD=$BESZEL_DB_PASSWORD
       - BESZEL_DB_NAME=beszel
       - BESZEL_DB_PORT=5432
     networks:
