@@ -1,21 +1,24 @@
 version: "3.9"
+
 services:
   beszel:
-    image: ghcr.io/beszel/beszel:latest
+    image: henrygd/beszel
     container_name: beszel
     restart: unless-stopped
-    env_file:
-      - monitoring.env
     ports:
-      - "8082:8080" # Changed to 8082 to avoid conflict with UniFi and WordPress
-    environment:
-      - BESZEL_DB_HOST=postgres_main
-      - BESZEL_DB_USER=$BESZEL_DB_USER
-      - BESZEL_DB_PASSWORD=$BESZEL_DB_PASSWORD
-      - BESZEL_DB_NAME=beszel
-      - BESZEL_DB_PORT=5432
+      - "8090:8090"
+    volumes:
+      - beszel_data:/beszel_data
     networks:
       - monitor_net
+
+volumes:
+  beszel_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=$NFS_IP,nolock,soft,rw,nfsvers=4
+      device: :/volume5/docker/beszel
 
 networks:
   monitor_net:
