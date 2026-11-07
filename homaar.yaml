@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:latest
+    container_name: homarr
+    restart: unless-stopped
+    ports:
+      - "7575:7575"
+    environment:
+      - TZ=America/Denver # Set to your local timezone
+      # Mandatory: Replace with a 64-character hex string (generated via `openssl rand -hex 32`)
+      - SECRET_ENCRYPTION_KEY=${HEXKEY}
+    volumes:
+      # Persistent app data directory for SQLite database & configs
+      - /var/lib/docker/volumes/homarr_appdata:/appdata
+      # Optional: Mount Docker socket only if you want Homarr's auto-discovery/container monitoring feature
+      # - /var/run/docker.sock:/var/run/docker.sock:ro
+
+volumes:
+  homarr_appdata:
+    name: homarr_appdata

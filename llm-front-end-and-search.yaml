@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    ports:
+      - "8081:8080"
+    environment:
+      - SEARXNG_SECRET=${SEARXNG_SECRET}
+      - SEARXNG_BASE_URL=${SEARXNG_BASE_URL:-http://localhost:8081/}
+    configs:
+      - source: searxng_settings
+        target: /etc/searxng/settings.yml
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://192.168.1.98:11434}
+      - ENABLE_WEB_SEARCH=True
+      - WEB_SEARCH_ENGINE=searxng
+      - SEARXNG_QUERY_URL=http://searxng:8080/search?q=<query>
+    volumes:
+      - webui_data:/app/backend/data
+    restart: unless-stopped
+    depends_on:
+      - searxng
+
+volumes:
+  webui_data:
+
+# This block injects the settings directly into the container
+configs:
+  searxng_settings:
+    content: |
+      use_default_settings: true
+      search:
+        formats:
+          - html
+          - json
+      server:
+        limiter: false

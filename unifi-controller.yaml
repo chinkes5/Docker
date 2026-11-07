@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   controller:
-    image: "jacobalberty/unifi:${TAG:-latest}"
+    image: "jacobalberty/unifi:v10.0.162"
     container_name: "${COMPOSE_PROJECT_NAME:-unifi}_controller"
     init: true
     restart: always
